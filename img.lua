@@ -1,29 +1,9 @@
-#!/usr/bin/luajit
-local ffi = require 'ffi'
-local C = ffi.C
-
-img = { }
-
-x = 20
-y = 15
-
 function dist(x1,y1,x2,y2)
 
     local xd = (x1 - x2)
     local yd = (y1 - y2)
     return math.sqrt(xd * xd + yd * yd)
 
-end
-
-for i = 1,40 do
-    img[i] = { }
-    for j = 1,30 do
-        if dist(i,j,x,y) < 7 then
-            img[i][j] = 1
-        else
-            img[i][j] = 0
-        end
-    end
 end
 
 function display(img)
@@ -81,9 +61,3 @@ function threshold(img,n)
 
 end
 
-display(img)
-display(contrast(img))
-
-i = contrast(img)
-t = threshold(i,3)
-display(t)
