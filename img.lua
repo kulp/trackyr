@@ -41,11 +41,13 @@ function display(img)
 
 end
 
-function contrast(img,w,h)
+function contrast(img)
 
     local out = { }
+    local w = #img
     for x = 2,w-1 do
         out[x] = { }
+        local h = #img[x]
         for y = 2,h-1 do
             out[x][y] = 0
             for i = -1,1 do
@@ -60,4 +62,4 @@ function contrast(img,w,h)
 end
 
 display(img)
-display(contrast(img,40,30))
+display(contrast(img))
