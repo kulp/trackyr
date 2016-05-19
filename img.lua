@@ -45,14 +45,18 @@ function contrast(img)
 
     local out = { }
     local w = #img
-    for x = 2,w-1 do
+    for x = 1,w do
         out[x] = { }
         local h = #img[x]
-        for y = 2,h-1 do
+        for y = 1,h do
             out[x][y] = 0
             for i = -1,1 do
                 for j = -1,1 do
-                    out[x][y] = out[x][y] + math.abs(img[x+i][y+j] - img[x][y])
+                    if x+i > 0 and y+j > 0 and x+i < w and y+j < h then
+                        out[x][y] = out[x][y] + math.abs(img[x+i][y+j] - img[x][y])
+                    else
+                        out[x][y] = 0
+                    end
                 end
             end
         end
