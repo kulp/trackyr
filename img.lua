@@ -65,5 +65,25 @@ function contrast(img)
 
 end
 
+function threshold(img,n)
+
+    local out = img
+    local w = #img
+    for x = 1,w do
+        local h = #img[x]
+        for y = 1,h do
+            if out[x][y] < n then
+                out[x][y] = 0
+            end
+        end
+    end
+    return out
+
+end
+
 display(img)
 display(contrast(img))
+
+i = contrast(img)
+t = threshold(i,3)
+display(t)
