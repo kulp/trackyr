@@ -72,3 +72,18 @@ function image_each(img,celldone,rowdone)
 
 end
 
+function to_points(img)
+
+    local out = { }
+    image_each(img,
+            function(v,x,y)
+                if v > 0 then
+                    table.insert(out, { x=x, y=y, v=v })
+                end
+            end
+        )
+
+    return out
+
+end
+
