@@ -3,6 +3,7 @@ local ffi = require 'ffi'
 local C = ffi.C
 
 require 'img'
+require 'hull'
 
 img = { }
 
@@ -23,5 +24,10 @@ end
 display(img)
 c = contrast(img)
 display(c)
-t = threshold(c,3)
-display(t)
+t = threshold(c,4)
+
+x = to_points(t)
+xx = graham_scan(x)
+im = from_points(xx)
+display(im)
+
