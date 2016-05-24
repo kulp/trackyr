@@ -47,17 +47,28 @@ end
 
 function threshold(img,n)
 
-    local out = img
-    local w = #img
-    for x = 1,w do
-        local h = #img[x]
-        for y = 1,h do
-            if out[x][y] < n then
-                out[x][y] = 0
+    local out = { }
+    image_each(img, function (v,x,y)
+        out[x] = out[x] or { }
+        out[x][y] = v < n and 0 or v
+    end)
+
+    return out
+
+end
+
+function image_each(img,celldone,rowdone)
+
+    for x = 1, #img do
+        for y = 1, #img[x] do
+            if celldone then
+                celldone(img[x][y],x,y)
             end
         end
+        if rowdone then
+            rowdone(img[x],x)
+        end
     end
-    return out
 
 end
 
