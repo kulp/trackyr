@@ -87,3 +87,15 @@ function to_points(img)
 
 end
 
+function from_points(points)
+
+    local img = { }
+    for _,v in ipairs(points) do
+        img[v.x] = img[v.x] or { }
+        img[v.x][v.y] = v.v
+    end
+
+    return img
+
+end
+
