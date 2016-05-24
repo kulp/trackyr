@@ -47,3 +47,35 @@ function graham_scan(ps)
 
 end
 
+function all_true(arr,func)
+
+    for _,v in ipairs(arr) do
+        if not func(v) then
+            return false
+        end
+    end
+    return true
+
+end
+
+-- returns strictly within (not collinear with an edge)
+function inside_ccw_hull(pt,hull)
+
+    local angles = { }
+    for k,v in ipairs(hull) do
+        local m = ((k + 1) % #hull);
+        local w = hull[m]
+
+        local px = v.x - pt.x
+        local py = v.y - pt.y
+
+        local qx = w.x - pt.x
+        local qy = w.y - pt.y
+
+        angles[k] = qx * py - px * qy;
+    end
+
+    return all_true(angles, function(x) return x < 0 end) or
+           all_true(angles, function(x) return x > 0 end)
+
+end
