@@ -2,7 +2,7 @@ struct pgm_image {
     char magic[2];
     int width, height;
 	int max;
-    char data[];
+    unsigned char data[];
 };
 
 int pgm_read(FILE *stream, struct pgm_image **out);
