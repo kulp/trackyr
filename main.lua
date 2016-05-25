@@ -31,3 +31,14 @@ xx = graham_scan(x)
 im = from_points(xx)
 display(im)
 
+local copy = { }
+image_each(c,
+    function (v,x,y)
+        copy[x] = copy[x] or { }
+        if inside_ccw_hull({x=x,y=y}, xx) then
+            copy[x][y] = v
+        end
+    end)
+
+display(copy)
+
