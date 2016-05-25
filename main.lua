@@ -4,6 +4,7 @@ local C = ffi.C
 
 require 'img'
 require 'hull'
+local pgm = require 'pgm'
 
 img = { }
 
@@ -41,4 +42,10 @@ image_each(c,
     end)
 
 display(copy)
+
+local qq = pgm.read("oval000.pgm")
+qq.data[15] = 255
+pgm.write("oval111.pgm", qq)
+local rr = from_pgm(qq)
+display(rr)
 
