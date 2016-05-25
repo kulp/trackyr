@@ -58,8 +58,7 @@ function all_true(arr,func)
 
 end
 
--- returns strictly within (not collinear with an edge)
-function inside_ccw_hull(pt,hull)
+function inside_ccw_hull(pt,hull,strict)
 
     local angles = { }
     for k,v in ipairs(hull) do
@@ -75,7 +74,12 @@ function inside_ccw_hull(pt,hull)
         angles[k] = qx * py - px * qy;
     end
 
-    return all_true(angles, function(x) return x < 0 end) or
-           all_true(angles, function(x) return x > 0 end)
+    function lt(x)  return x <  0 end
+    function gt(x)  return x >  0 end
+    function lte(x) return x <= 0 end
+    function gte(x) return x >= 0 end
+
+    return all_true(angles, strict and lt or lte) or
+           all_true(angles, strict and gt or gte)
 
 end
