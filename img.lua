@@ -11,9 +11,9 @@ function display(img)
     for i = 1,40 do
         for j = 1,30 do
             if img[i] ~= nil and img[i][j] ~= nil then
-                io.write(img[i][j])
+                io.write(string.format("%03d", img[i][j]))
             else
-                io.write('.')
+                io.write(' . ')
             end
         end
         io.write('\n')
