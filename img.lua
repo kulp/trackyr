@@ -99,3 +99,19 @@ function from_points(points)
 
 end
 
+function from_pgm(pgm)
+
+    local out = { }
+    local w = pgm.width
+    local h = pgm.height
+    for x = 0,w-1 do
+        out[x+1] = { }
+        for y = 0,h-1 do
+            out[x+1][y+1] = pgm.data[x + y * w]
+        end
+    end
+
+    return out
+
+end
+
