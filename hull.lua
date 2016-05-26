@@ -43,7 +43,10 @@ function graham_scan(ps)
         points[M], points[i] = points[i], points[M]
     end
 
-    return points, M
+    while #points > M do
+        table.remove(points)
+    end
+    return points
 
 end
 

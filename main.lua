@@ -50,4 +50,3 @@ qq.data[15] = 255
 pgm.write("oval111.pgm", qq)
 local rr = from_pgm(qq)
 display(rr,w,h)
-
