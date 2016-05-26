@@ -34,19 +34,13 @@ xx = graham_scan(x)
 im = from_points(xx)
 display(im,w,h)
 
-local copy = { }
-image_each(c,
-    function (v,x,y)
-        copy[x] = copy[x] or { }
-        if inside_ccw_hull({x=x,y=y}, xx) then
-            copy[x][y] = v
-        end
-    end)
-
-display(copy,w,h)
-
 local qq = pgm.read("oval000.pgm")
 qq.data[15] = 255
 pgm.write("oval111.pgm", qq)
 local rr = from_pgm(qq)
 display(rr,w,h)
+rs = to_points(rr)
+xp = graham_scan(rs)
+local copy = copy_with_hull(rr,xp,false)
+display(copy,w,h)
+

@@ -86,3 +86,19 @@ function inside_ccw_hull(pt,hull,strict)
            all_true(angles, strict and gt or gte)
 
 end
+
+function copy_with_hull(img,hull,strict)
+
+    local copy = { }
+    image_each(img,
+        function (v,x,y)
+            copy[x] = copy[x] or { }
+            if inside_ccw_hull({x=x,y=y}, hull, strict) then
+                copy[x][y] = v
+            end
+        end)
+
+    return copy
+
+end
+
