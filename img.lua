@@ -6,12 +6,14 @@ function dist(x1,y1,x2,y2)
 
 end
 
-function display(img)
+function display(img,w,h)
 
-    for i = 1,40 do
-        for j = 1,30 do
-            if img[i] ~= nil and img[i][j] ~= nil then
-                io.write(string.format("%03d", img[i][j]))
+    h = h or #img
+    w = w or #img[1]
+    for y = 1,h do
+        for x = 1,w do
+            if img[x] ~= nil and img[x][y] ~= nil then
+                io.write(string.format("%03d", img[x][y]))
             else
                 io.write(' . ')
             end

@@ -8,8 +8,10 @@ local pgm = require 'pgm'
 
 img = { }
 
-x = 20
-y = 15
+w = 40
+h = 30
+x = w/2
+y = h/2
 
 for i = 1,40 do
     img[i] = { }
@@ -30,7 +32,7 @@ t = threshold(c,4)
 x = to_points(t)
 xx = graham_scan(x)
 im = from_points(xx)
-display(im)
+display(im,w,h)
 
 local copy = { }
 image_each(c,
@@ -41,11 +43,11 @@ image_each(c,
         end
     end)
 
-display(copy)
+display(copy,w,h)
 
 local qq = pgm.read("oval000.pgm")
 qq.data[15] = 255
 pgm.write("oval111.pgm", qq)
 local rr = from_pgm(qq)
-display(rr)
+display(rr,w,h)
 
