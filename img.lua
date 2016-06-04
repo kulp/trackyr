@@ -17,7 +17,7 @@ function lib.display(img,w,h)
 
 end
 
-function lib.contrast(img)
+function lib.contrast(img,normalize)
 
     local out = { }
     local w = #img
@@ -34,6 +34,10 @@ function lib.contrast(img)
                         out[x][y] = 0
                     end
                 end
+            end
+            if normalize then
+                -- TODO this is not correct at edges of image
+                out[x][y] = out[x][y] / 8
             end
         end
     end
