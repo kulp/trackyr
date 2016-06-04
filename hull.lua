@@ -1,5 +1,7 @@
 local LARGE_VALUE = 1000000
 
+local img = require 'img'
+
 function ccw(p1, p2, p3)
     return (p2.x - p1.x) * (p3.y - p1.y) -
            (p2.y - p1.y) * (p3.x - p1.x)
@@ -90,10 +92,10 @@ function inside_ccw_hull(pt,hull,strict)
 
 end
 
-function copy_with_hull(img,hull,strict)
+function copy_with_hull(im,hull,strict)
 
     local copy = { }
-    image_each(img,
+    img.image_each(im,
         function (v,x,y)
             copy[x] = copy[x] or { }
             if inside_ccw_hull({x=x,y=y}, hull, strict) then

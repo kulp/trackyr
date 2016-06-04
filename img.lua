@@ -1,5 +1,6 @@
+local lib = { }
 
-function display(img,w,h)
+function lib.display(img,w,h)
 
     h = h or #img
     w = w or #img[1]
@@ -16,7 +17,7 @@ function display(img,w,h)
 
 end
 
-function contrast(img)
+function lib.contrast(img)
 
     local out = { }
     local w = #img
@@ -40,10 +41,10 @@ function contrast(img)
 
 end
 
-function threshold(img,n)
+function lib.threshold(img,n)
 
     local out = { }
-    image_each(img, function (v,x,y)
+    lib.image_each(img, function (v,x,y)
         out[x] = out[x] or { }
         out[x][y] = v < n and 0 or v
     end)
@@ -52,7 +53,7 @@ function threshold(img,n)
 
 end
 
-function image_each(img,celldone,rowdone)
+function lib.image_each(img,celldone,rowdone)
 
     for x = 1, #img do
         for y = 1, #img[x] do
@@ -67,10 +68,10 @@ function image_each(img,celldone,rowdone)
 
 end
 
-function to_points(img)
+function lib.to_points(img)
 
     local out = { }
-    image_each(img,
+    lib.image_each(img,
             function(v,x,y)
                 if v > 0 then
                     table.insert(out, { x=x, y=y, v=v })
@@ -82,7 +83,7 @@ function to_points(img)
 
 end
 
-function from_points(points)
+function lib.from_points(points)
 
     local img = { }
     for _,v in ipairs(points) do
@@ -94,7 +95,7 @@ function from_points(points)
 
 end
 
-function from_pgm(pgm)
+function lib.from_pgm(pgm)
 
     local out = { }
     local w = pgm.width
@@ -110,3 +111,4 @@ function from_pgm(pgm)
 
 end
 
+return lib
