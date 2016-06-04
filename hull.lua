@@ -2,16 +2,18 @@ local LARGE_VALUE = 1000000
 
 local img = require 'img'
 
-function ccw(p1, p2, p3)
+local lib = { }
+
+function lib.ccw(p1, p2, p3)
     return (p2.x - p1.x) * (p3.y - p1.y) -
            (p2.y - p1.y) * (p3.x - p1.x)
 end
 
-function slope(a,b)
+function lib.slope(a,b)
     return (b.x - a.x) / (b.y - a.y);
 end
 
-function graham_scan(ps)
+function lib.graham_scan(ps)
 
     local points = ps
     local min_y = { x=0, y=LARGE_VALUE }
@@ -23,7 +25,7 @@ function graham_scan(ps)
     end
 
     function by_slope(a,b)
-        return slope(min_y, a) > slope(min_y, b)
+        return lib.slope(min_y, a) > lib.slope(min_y, b)
     end
 
     table.remove(points, min_y.i)
@@ -34,7 +36,7 @@ function graham_scan(ps)
 
     local M = 1
     for i = 2,#points do
-        while ccw(points[M-1], points[M], points[i]) <= 0 do
+        while lib.ccw(points[M-1], points[M], points[i]) <= 0 do
             if M > 1 then
                 M = M - 1
             elseif i == N then
@@ -55,7 +57,7 @@ function graham_scan(ps)
 
 end
 
-function all_true(arr,func)
+function lib.all_true(arr,func)
 
     for _,v in ipairs(arr) do
         if not func(v) then
@@ -66,7 +68,7 @@ function all_true(arr,func)
 
 end
 
-function inside_ccw_hull(pt,hull,strict)
+function lib.inside_ccw_hull(pt,hull,strict)
 
     local angles = { }
     for k,v in ipairs(hull) do
@@ -87,18 +89,18 @@ function inside_ccw_hull(pt,hull,strict)
     function lte(x) return x <= 0 end
     function gte(x) return x >= 0 end
 
-    return all_true(angles, strict and lt or lte) or
-           all_true(angles, strict and gt or gte)
+    return lib.all_true(angles, strict and lt or lte) or
+           lib.all_true(angles, strict and gt or gte)
 
 end
 
-function copy_with_hull(im,hull,strict)
+function lib.copy_with_hull(im,hull,strict)
 
     local copy = { }
     img.image_each(im,
         function (v,x,y)
             copy[x] = copy[x] or { }
-            if inside_ccw_hull({x=x,y=y}, hull, strict) then
+            if lib.inside_ccw_hull({x=x,y=y}, hull, strict) then
                 copy[x][y] = v
             end
         end)
@@ -107,7 +109,7 @@ function copy_with_hull(im,hull,strict)
 
 end
 
-function box_around(hull)
+function lib.box_around(hull)
 
     local min_x = LARGE_VALUE
     local min_y = LARGE_VALUE
@@ -128,3 +130,4 @@ function box_around(hull)
 
 end
 
+return lib
