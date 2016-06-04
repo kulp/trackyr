@@ -1,7 +1,7 @@
 struct pgm_image {
     char magic[2];
     int width, height;
-	int max;
+    int max;
     unsigned char data[];
 };
 

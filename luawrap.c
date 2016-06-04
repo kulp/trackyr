@@ -20,10 +20,10 @@ int main()
     int result = 0;
 
     lua_State *L = luaL_newstate();
-	if (!L) {
-		fprintf(stderr, "Failed to allocate Lua state\n");
-		return -1;
-	}
+    if (!L) {
+        fprintf(stderr, "Failed to allocate Lua state\n");
+        return -1;
+    }
     luaL_openlibs(L);
 
     mydo(L,"main.lua",result);
