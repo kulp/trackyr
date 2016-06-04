@@ -46,6 +46,7 @@ function graham_scan(ps)
     while #points > M do
         table.remove(points)
     end
+    points[0] = nil -- remove temporary index 0
     return points
 
 end
@@ -65,7 +66,7 @@ function inside_ccw_hull(pt,hull,strict)
 
     local angles = { }
     for k,v in ipairs(hull) do
-        local m = ((k + 1) % #hull);
+        local m = (k % #hull) + 1;
         local w = hull[m]
 
         local px = v.x - pt.x
@@ -116,14 +117,10 @@ function box_around(hull)
         if v.y > max_y then max_y = v.y end
     end
 
-    local res = { { x=min_x, y=min_y },
-                  { x=min_x, y=max_y },
-                  { x=max_x, y=max_y },
-                  { x=max_x, y=min_y } }
-    -- TODO currently a hull requires the 0th point and the last point to be
-    -- the same. We should remove the requirement for a 0th point.
-    res[0] = res[#res]
-    return res
+    return { { x=min_x, y=min_y },
+             { x=min_x, y=max_y },
+             { x=max_x, y=max_y },
+             { x=max_x, y=min_y } }
 
 end
 
