@@ -1,10 +1,3 @@
-function dist(x1,y1,x2,y2)
-
-    local xd = (x1 - x2)
-    local yd = (y1 - y2)
-    return math.sqrt(xd * xd + yd * yd)
-
-end
 
 function display(img,w,h)
 
