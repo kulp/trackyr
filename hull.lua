@@ -1,3 +1,5 @@
+local LARGE_VALUE = 1000000
+
 function ccw(p1, p2, p3)
     return (p2.x - p1.x) * (p3.y - p1.y) -
            (p2.y - p1.y) * (p3.x - p1.x)
@@ -10,7 +12,7 @@ end
 function graham_scan(ps)
 
     local points = ps
-    local min_y = { x=0, y=1000000 }
+    local min_y = { x=0, y=LARGE_VALUE }
     for k,v in ipairs(points) do
         if v.y < min_y.y or (v.y == min_y.y and v.x < min_y.x) then
             min_y = v
@@ -105,8 +107,8 @@ end
 
 function box_around(hull)
 
-    local min_x = 1000000
-    local min_y = 1000000
+    local min_x = LARGE_VALUE
+    local min_y = LARGE_VALUE
     local max_x = -1
     local max_y = -1
 
