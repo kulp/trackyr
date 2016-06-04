@@ -16,6 +16,10 @@ end
 function lib.graham_scan(ps)
 
     local points = ps
+    if #points < 3 then
+        return points
+    end
+
     local min_y = { x=0, y=LARGE_VALUE }
     for k,v in ipairs(points) do
         if v.y < min_y.y or (v.y == min_y.y and v.x < min_y.x) then
@@ -70,6 +74,7 @@ end
 
 function lib.inside_ccw_hull(pt,hull,strict)
 
+    -- TODO handle better the case with two points
     local angles = { }
     for k,v in ipairs(hull) do
         local m = (k % #hull) + 1;
