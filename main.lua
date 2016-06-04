@@ -44,3 +44,7 @@ xp = graham_scan(rs)
 local copy = copy_with_hull(rr,xp,false)
 display(copy,w,h)
 
+local box = box_around(xp)
+copy = copy_with_hull(rr,box,false)
+display(copy,w,h)
+

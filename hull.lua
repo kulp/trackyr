@@ -102,3 +102,28 @@ function copy_with_hull(img,hull,strict)
 
 end
 
+function box_around(hull)
+
+    local min_x = 1000000
+    local min_y = 1000000
+    local max_x = -1
+    local max_y = -1
+
+    for _,v in ipairs(hull) do
+        if v.x < min_x then min_x = v.x end
+        if v.x > max_x then max_x = v.x end
+        if v.y < min_y then min_y = v.y end
+        if v.y > max_y then max_y = v.y end
+    end
+
+    local res = { { x=min_x, y=min_y },
+                  { x=min_x, y=max_y },
+                  { x=max_x, y=max_y },
+                  { x=max_x, y=min_y } }
+    -- TODO currently a hull requires the 0th point and the last point to be
+    -- the same. We should remove the requirement for a 0th point.
+    res[0] = res[#res]
+    return res
+
+end
+
