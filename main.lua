@@ -34,7 +34,7 @@ xx = graham_scan(x)
 im = from_points(xx)
 display(im,w,h)
 
-local qq = pgm.read("oval000.pgm")
+local qq = pgm.read(arg[1])
 pgm.write("oval111.pgm", qq)
 local rr = from_pgm(qq)
 display(rr,w,h)
