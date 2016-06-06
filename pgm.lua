@@ -51,4 +51,17 @@ function pgm.write(filename,pgm)
 
 end
 
+function pgm.from_image(im,w,h)
+
+    local p = pgm.create(w,h)
+    for x = 0,w-1 do
+        for y = 0,h-1 do
+            p.data[x + y * w] = im[x+1][y+1] or 0
+        end
+    end
+
+    return p
+
+end
+
 return pgm
