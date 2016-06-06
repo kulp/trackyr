@@ -3,8 +3,8 @@ local img = require 'img'
 local hull = require 'hull'
 local pgm = require 'pgm'
 
-w = 40
-h = 30
+w = 80
+h = 60
 
 local qq = pgm.read(arg[1])
 local rr = img.from_pgm(qq)
