@@ -60,11 +60,24 @@ function render_image(im,bgnd)
         end)
 end
 
+function outline(rdr,box)
+
+    local a = box[1]
+    local b = box[3]
+    local w = b.x - a.x
+    local h = b.y - a.y
+
+    rdr:setDrawColor({r=255,g=0,g=0})
+    rdr:drawRect({x=a.x, y=a.y, w=w, h=h})
+
+end
+
 local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
 rdr:setDrawColor(bgnd)
 rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
-render_image(copy,bgnd)
+render_image(rr,bgnd)
+outline(rdr,box)
 rdr:present()
 
 SDL.delay(50000)
