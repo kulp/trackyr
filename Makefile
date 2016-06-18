@@ -1,4 +1,6 @@
-all: libpgm.so
+CPPFLAGS += -std=c99
+
+all: libpgm.so liblepton.so
 
 lib%.so: CFLAGS  += -fPIC
 lib%.so: LDFLAGS += -shared
