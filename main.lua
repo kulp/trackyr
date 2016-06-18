@@ -45,20 +45,26 @@ local box = hull.box_around(xp)
 copy = hull.copy_with_hull(rr,box,false)
 img.display(copy,screen_w,screen_h)
 
-function grey(v)
+function grey(v,bgnd)
 
-    v = v or 0
+    v = v == nil and bgnd or v
     local w = bit32.band(v,255)
     return bit32.lshift(w,16) + bit32.lshift(w,8) + w
 
 end
 
-rdr:setDrawColor(0xFFFFFF)
+function render_image(im,bgnd)
+    img.image_each(im,function(v,x,y)
+            rdr:setDrawColor(grey(v,bgnd))
+            rdr:drawPoint({x=x-1,y=y-1})
+        end)
+end
+
+local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
-img.image_each(rr,function(v,x,y)
-        rdr:setDrawColor(grey(v))
-        rdr:drawPoint({x=x-1,y=y-1})
-    end)
+rdr:setDrawColor(bgnd)
+rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
+render_image(copy,bgnd)
 rdr:present()
 
 SDL.delay(50000)
