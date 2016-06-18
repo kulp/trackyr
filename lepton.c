@@ -6,12 +6,13 @@
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
 #include <limits.h>
+#include <string.h>
 
 #define VOSPI_FRAME_SIZE (164)
 
 int get_line(int fd, int hz, int bits, unsigned int image[][80])
 {
-    int frame_number;
+    int frame_number = 0;
     uint8_t frame[VOSPI_FRAME_SIZE];
     struct spi_ioc_transfer tr = {
         .tx_buf        = (uintptr_t)(uint8_t[VOSPI_FRAME_SIZE]){ 0 },
@@ -26,9 +27,22 @@ int get_line(int fd, int hz, int bits, unsigned int image[][80])
     if (ret < 1)
         return -1;
 
-    if ((frame[0] & 0xf) == 0x0f) {
+    int is_status = (frame[0] & 0xf) == 0x0f;
+    uint8_t good[] = { 0xdc, 0xd0, 0xdc, 0xad };
+
+    int tries = 0;
+    while (is_status && memcmp(&frame[4], good, 4) && tries++ < 10) {
         usleep(200000L);
-    } else {
+        int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+        if (ret < 1)
+            return -1;
+        is_status = (frame[0] & 0xf) == 0x0f;
+    }
+
+    if (tries >= 10)
+        return -1;
+
+    if (!is_status) {
         frame_number = frame[1];
         if (frame_number < 60)
             for (int i = 0; i < 80; i++)
