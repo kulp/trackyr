@@ -39,16 +39,6 @@ end
 
 rdr:setLogicalSize(screen_w,screen_h)
 
-local qq = pgm.read(arg[1])
-local rr = img.from_pgm(qq)
-local ss = img.threshold(img.contrast(rr,true),256/16)
-rs = img.to_points(ss)
-xp = hull.graham_scan(rs)
-local copy = hull.copy_with_hull(rr,xp,false)
-
-local box = hull.box_around(xp)
-copy = hull.copy_with_hull(rr,box,false)
-
 function grey(v,bgnd)
 
     v = v == nil and bgnd or v
@@ -85,13 +75,21 @@ lepton.get_image(fd, hz, bits, image)
 local dd = ffi.cast("unsigned int*",image)
 local cc = img.from_array(dd, screen_w, screen_h)
 
-local ee = img.normalize(cc,256)
+local rr = img.normalize(cc,256)
+
+local ss = img.threshold(img.contrast(rr,true),256/16)
+rs = img.to_points(ss)
+xp = hull.graham_scan(rs)
+local copy = hull.copy_with_hull(rr,xp,false)
+
+local box = hull.box_around(xp)
+copy = hull.copy_with_hull(rr,box,false)
 
 local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
 rdr:setDrawColor(bgnd)
 rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
-render_image(ee,bgnd)
+render_image(rr,bgnd)
 outline(rdr,box)
 rdr:present()
 
