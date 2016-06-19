@@ -99,19 +99,23 @@ function lib.from_points(points)
 
 end
 
-function lib.from_pgm(pgm)
+function lib.from_array(arr,w,h)
 
     local out = { }
-    local w = pgm.width
-    local h = pgm.height
     for x = 0,w-1 do
         out[x+1] = { }
         for y = 0,h-1 do
-            out[x+1][y+1] = pgm.data[x + y * w]
+            out[x+1][y+1] = arr[x + y * w]
         end
     end
 
     return out
+
+end
+
+function lib.from_pgm(pgm)
+
+    return lib.from_array(pgm.data, pgm.width, pgm.height)
 
 end
 
