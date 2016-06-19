@@ -135,10 +135,7 @@ while true do
     -- graham_scan can fail sometimes FIXME
     local success, xp = pcall(function () return hull.graham_scan(rs) end)
     if success then
-        local copy = hull.copy_with_hull(rr,xp,false)
-
         local box = hull.box_around(xp)
-        copy = hull.copy_with_hull(rr,box,false)
 
         render_image(rr,bgnd)
         outline(rdr,box)
