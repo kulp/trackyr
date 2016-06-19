@@ -67,30 +67,33 @@ function outline(rdr,box)
 end
 
 local image = ffi.new("lepton_image")
-local fd = lepton.set_up_spi("/dev/spidev0.1", 8, 16000000)
 local hz = 16000000
 local bits = 8
-lepton.get_image(fd, hz, bits, image)
-
-local dd = ffi.cast("unsigned int*",image)
-local cc = img.from_array(dd, screen_w, screen_h)
-
-local rr = img.normalize(cc,256)
-
-local ss = img.threshold(img.contrast(rr,true),256/16)
-rs = img.to_points(ss)
-xp = hull.graham_scan(rs)
-local copy = hull.copy_with_hull(rr,xp,false)
-
-local box = hull.box_around(xp)
-copy = hull.copy_with_hull(rr,box,false)
-
+local fd = lepton.set_up_spi("/dev/spidev0.1", hz, bits)
 local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
 rdr:setDrawColor(bgnd)
 rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
-render_image(rr,bgnd)
-outline(rdr,box)
-rdr:present()
 
-SDL.delay(50000)
+while true do
+    lepton.get_image(fd, hz, bits, image)
+
+    local dd = ffi.cast("unsigned int*",image)
+    local cc = img.from_array(dd, screen_w, screen_h)
+
+    local rr = img.normalize(cc,256)
+
+    local ss = img.threshold(img.contrast(rr,true),256/8)
+    rs = img.to_points(ss)
+    xp = hull.graham_scan(rs)
+    local copy = hull.copy_with_hull(rr,xp,false)
+
+    local box = hull.box_around(xp)
+    copy = hull.copy_with_hull(rr,box,false)
+
+    render_image(rr,bgnd)
+    outline(rdr,box)
+    rdr:present()
+    SDL.delay(500)
+end
+
