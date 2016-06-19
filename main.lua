@@ -69,6 +69,8 @@ function outline(rdr,box)
 end
 
 local contrast = 256/8
+local bg_image = { }
+local curr_image = { }
 
 function handle_key(keysym)
 
@@ -76,7 +78,26 @@ function handle_key(keysym)
         contrast = contrast + 4
     elseif keysym.scancode == SDL.scancode.Down then
         contrast = contrast - 4
+    elseif string.char(keysym.sym) == 'b' then
+        bg_image = curr_image
     end
+end
+
+function subtract_images(a,b)
+
+    local out = { }
+    img.image_each(a, function (v,x,y)
+            out[x] = out[x] or { }
+            out[x][y] = a[x][y]
+            if b[x] then
+                out[x][y] = out[x][y] - b[x][y]
+            end
+            if out[x][y] < 0 then
+                out[x][y] = 0
+            end
+        end)
+    return out
+
 end
 
 local image = ffi.new("lepton_image")
@@ -94,23 +115,28 @@ while true do
     local dd = ffi.cast("unsigned int*",image)
     local cc = img.from_array(dd, screen_w, screen_h)
 
-    local rr = img.normalize(cc,256)
+    curr_image = img.normalize(cc,256)
+
+    rr = subtract_images(curr_image,bg_image)
 
     local ss = img.threshold(img.contrast(rr,true),contrast)
     rs = img.to_points(ss)
-    xp = hull.graham_scan(rs)
-    local copy = hull.copy_with_hull(rr,xp,false)
+    -- graham_scan can fail sometimes FIXME
+    local success, xp = pcall(function () return hull.graham_scan(rs) end)
+    if success then
+        local copy = hull.copy_with_hull(rr,xp,false)
 
-    local box = hull.box_around(xp)
-    copy = hull.copy_with_hull(rr,box,false)
+        local box = hull.box_around(xp)
+        copy = hull.copy_with_hull(rr,box,false)
 
-    render_image(rr,bgnd)
-    outline(rdr,box)
-    rdr:present()
-    SDL.delay(100)
-    for e in  SDL.pollEvent() do
-        if e.type == SDL.event.KeyUp then
-            handle_key(e.keysym)
+        render_image(rr,bgnd)
+        outline(rdr,box)
+        rdr:present()
+        SDL.delay(100)
+        for e in  SDL.pollEvent() do
+            if e.type == SDL.event.KeyUp then
+                handle_key(e.keysym)
+            end
         end
     end
 end
