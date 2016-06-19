@@ -119,4 +119,25 @@ function lib.from_pgm(pgm)
 
 end
 
+function lib.normalize(im,val)
+
+    local out = { }
+    local max = 0
+    local min = 1000000
+    lib.image_each(im, function(v,x,y)
+            if v < min then min = v end
+            if v > max then max = v end
+        end)
+
+    local range = max - min
+
+    lib.image_each(im, function(v,x,y)
+            out[x] = out[x] or { }
+            out[x][y] = (v - min) / range * val
+        end)
+
+    return out
+
+end
+
 return lib

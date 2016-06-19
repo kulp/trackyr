@@ -85,11 +85,13 @@ lepton.get_image(fd, hz, bits, image)
 local dd = ffi.cast("unsigned int*",image)
 local cc = img.from_array(dd, screen_w, screen_h)
 
+local ee = img.normalize(cc,256)
+
 local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
 rdr:setDrawColor(bgnd)
 rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
-render_image(cc,bgnd)
+render_image(ee,bgnd)
 outline(rdr,box)
 rdr:present()
 
