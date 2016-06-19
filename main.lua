@@ -94,6 +94,6 @@ while true do
     render_image(rr,bgnd)
     outline(rdr,box)
     rdr:present()
-    SDL.delay(500)
+    SDL.delay(100)
 end
 

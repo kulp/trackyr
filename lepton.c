@@ -54,8 +54,10 @@ int get_line(int fd, int hz, int bits, unsigned int image[][80])
 
 int get_image(int fd, int hz, int bits, unsigned int image[][80])
 {
-    while (get_line(fd, hz, bits, image) != 59)
-        ; // cycle
+    int frame;
+    do {
+        frame = get_line(fd, hz, bits, image);
+    } while (frame == 255 || frame >= 0 && frame < 59);
     return 0;
 }
 
