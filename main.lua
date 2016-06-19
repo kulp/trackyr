@@ -17,7 +17,7 @@ local lepton = ffi.load("./liblepton.so")
 local screen_w = 80
 local screen_h = 60
 
-local ret, err = SDL.init { SDL.flags.Video }
+local ret, err = SDL.init { SDL.flags.Video + SDL.flags.Events }
 if not ret then
     error(err)
 end
@@ -68,6 +68,17 @@ function outline(rdr,box)
 
 end
 
+local contrast = 256/8
+
+function handle_key(keysym)
+
+    if keysym.scancode == SDL.scancode.Up then
+        contrast = contrast + 4
+    elseif keysym.scancode == SDL.scancode.Down then
+        contrast = contrast - 4
+    end
+end
+
 local image = ffi.new("lepton_image")
 local hz = 16000000
 local bits = 8
@@ -85,7 +96,7 @@ while true do
 
     local rr = img.normalize(cc,256)
 
-    local ss = img.threshold(img.contrast(rr,true),256/8)
+    local ss = img.threshold(img.contrast(rr,true),contrast)
     rs = img.to_points(ss)
     xp = hull.graham_scan(rs)
     local copy = hull.copy_with_hull(rr,xp,false)
@@ -97,5 +108,10 @@ while true do
     outline(rdr,box)
     rdr:present()
     SDL.delay(100)
+    for e in  SDL.pollEvent() do
+        if e.type == SDL.event.KeyUp then
+            handle_key(e.keysym)
+        end
+    end
 end
 
