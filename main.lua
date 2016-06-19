@@ -3,8 +3,16 @@ local img = require 'img'
 local hull = require 'hull'
 local pgm = require 'pgm'
 local SDL = require 'SDL'
-
 local bit32 = require 'bit'
+local ffi = require "ffi"
+
+ffi.cdef[[
+int set_up_spi(const char *device, unsigned int bits, unsigned int speed);
+typedef unsigned int lepton_image[60][80];
+int get_image(int fd, int hz, int bits, lepton_image img);
+]]
+
+local lepton = ffi.load("./liblepton.so")
 
 local screen_w = 80
 local screen_h = 60
@@ -68,11 +76,20 @@ function outline(rdr,box)
 
 end
 
+local image = ffi.new("lepton_image")
+local fd = lepton.set_up_spi("/dev/spidev0.1", 8, 16000000)
+local hz = 16000000
+local bits = 8
+lepton.get_image(fd, hz, bits, image)
+
+local dd = ffi.cast("unsigned int*",image)
+local cc = img.from_array(dd, screen_w, screen_h)
+
 local bgnd = 0x000001 -- if it's all zeros, we get no drawing ? or white ?
 rdr:clear()
 rdr:setDrawColor(bgnd)
 rdr:fillRect({x=0,y=0,w=screen_w,h=screen_h})
-render_image(rr,bgnd)
+render_image(cc,bgnd)
 outline(rdr,box)
 rdr:present()
 
