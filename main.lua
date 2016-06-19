@@ -39,6 +39,8 @@ end
 
 rdr:setLogicalSize(screen_w,screen_h)
 
+SDL.setRelativeMouseMode(true)
+
 function grey(v,bgnd)
 
     v = v == nil and bgnd or v
