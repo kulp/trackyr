@@ -71,6 +71,7 @@ end
 local contrast = 256/8
 local bg_image = { }
 local curr_image = { }
+local floor = 0
 
 function handle_key(keysym)
 
@@ -78,6 +79,12 @@ function handle_key(keysym)
         contrast = contrast + 4
     elseif keysym.scancode == SDL.scancode.Down then
         contrast = contrast - 4
+    elseif string.char(keysym.sym) == '[' then
+        floor = floor - 4
+        if floor < 0 then floor = 0 end
+    elseif string.char(keysym.sym) == ']' then
+        floor = floor + 4
+        if floor > 256 then floor = 256 end
     elseif string.char(keysym.sym) == 'b' then
         bg_image = curr_image
     elseif string.char(keysym.sym) == 'c' then
@@ -120,6 +127,8 @@ while true do
     curr_image = img.normalize(cc,256)
 
     rr = subtract_images(curr_image,bg_image)
+
+    rr = img.threshold(rr,floor)
 
     local ss = img.threshold(img.contrast(rr,true),contrast)
     rs = img.to_points(ss)
