@@ -80,6 +80,8 @@ function handle_key(keysym)
         contrast = contrast - 4
     elseif string.char(keysym.sym) == 'b' then
         bg_image = curr_image
+    elseif string.char(keysym.sym) == 'c' then
+        bg_image = { }
     end
 end
 
